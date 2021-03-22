@@ -1,0 +1,80 @@
+@import url('https://rsms.me/inter/inter.css');
+html {
+   font-family: 'Inter', sans-serif;
+   font-feature-settings: "cv05";
+}
+@supports (font-variation-settings: normal) {
+   html {
+      font-family: 'Inter var', sans-serif;
+      font-feature-settings: "cv05";
+   }
+}
+
+input[type="text"] {
+   font-size: 16px;
+   font-family: 'Inter', sans-serif;
+   font-feature-settings: "cv05";
+}
+@supports (font-variation-settings: normal) {
+   input[type="text"] {
+      font-family: 'Inter var', sans-serif;
+      font-feature-settings: "cv05";
+   }
+}
+
+input[type="text"] {
+   /*border: 2px solid blue; todo sth */
+}
+
+html {
+   /*background-color: hsl(0, 0%, 91%);*/
+   font-size: 16px;
+}
+
+a {
+   /* todo sth */
+}
+
+.card {
+   padding: 2px 20px 20px 20px;
+   border-radius: 16px;
+   background-color: #fff;
+   /*margin: auto;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   -ms-transform: translate(-50%, -50%);
+   transform: translate(-50%, -50%);
+   display: flex;
+   justify-content: center;
+   align-items: center;*/
+   max-width: 60%;
+   margin: auto;
+   
+   text-align: justify;
+
+   /*box-shadow: 0px 15px 25px 5px rgb(0 0 0 / 15%);*/
+   box-shadow: 0px 0px 15px 5px rgb(0 0 0 / 15%);
+}
+
+.ps-root {
+   font-size: 18px !important;
+}
+
+.code {
+   max-width: 60%;
+   margin: auto;
+}
+
+.visualization {
+}
+
+.visualization-content {
+   max-width: 80%;
+   margin: auto;
+   display: flex;
+   justify-content: center; 
+   align-items: center;
+}
+
+/* todo center more stuff? visualizations etc idk */
