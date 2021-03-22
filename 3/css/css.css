@@ -23,37 +23,23 @@ input[type="text"] {
 }
 
 input[type="text"] {
-   /*border: 2px solid blue; todo sth */
+   width: 30%;
 }
 
 html {
-   /*background-color: hsl(0, 0%, 91%);*/
    font-size: 16px;
 }
 
 a {
-   /* todo sth */
 }
 
 .card {
    padding: 2px 20px 20px 20px;
    border-radius: 16px;
    background-color: #fff;
-   /*margin: auto;
-   position: absolute;
-   top: 50%;
-   left: 50%;
-   -ms-transform: translate(-50%, -50%);
-   transform: translate(-50%, -50%);
-   display: flex;
-   justify-content: center;
-   align-items: center;*/
    max-width: 60%;
    margin: auto;
-   
    text-align: justify;
-
-   /*box-shadow: 0px 15px 25px 5px rgb(0 0 0 / 15%);*/
    box-shadow: 0px 0px 15px 5px rgb(0 0 0 / 15%);
 }
 
@@ -69,7 +55,7 @@ a {
 .visualization {
 }
 
-.visualization-content {
+.visualization-input {
    max-width: 80%;
    margin: auto;
    display: flex;
@@ -77,4 +63,29 @@ a {
    align-items: center;
 }
 
-/* todo center more stuff? visualizations etc idk */
+.visualization-content {
+   max-width: 80%;
+   margin: auto;
+   display: flex;
+   justify-content: center; 
+   align-items: center;
+   flex-direction: column;
+}
+
+.array {
+   display: flex;
+   justify-content: center;
+   margin: 2px;
+}
+
+.array-element {
+   border: 2px solid black;
+   font-size: 20px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: 20px;
+   width: 20px;
+   padding: 8px;
+   margin: 4px;
+}

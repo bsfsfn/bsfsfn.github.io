@@ -14,7 +14,8 @@
             processEscapes: true,
             processEnvironments: true,
             macros: {
-               bigO: ["\\operatorname{O}\\!\\left(#1\\right)", 1]
+               bigO: ["\\operatorname{O}\\!\\left(#1\\right)", 1],
+               bigTheta: ["\\operatorname{\\Theta}\\!\\left(#1\\right)", 1]
             }
          }
       }
@@ -29,14 +30,17 @@
 
    <script>
       function draw_array(A, id) {
-         document.getElementById(id).innerHTML += "[";
+         let newMainSpan = document.createElement('span');
+         newMainSpan.setAttribute('class', 'array');
+
          for (j = 0; j < A.length; ++j) {
-            document.getElementById(id).innerHTML += A[j];
-            if (j < A.length - 1) {
-               document.getElementById(id).innerHTML += ",";
-            }
+            let newSpan = document.createElement('span');
+            newSpan.setAttribute('class', 'array-element');
+            newSpan.innerHTML = A[j];
+            newMainSpan.appendChild(newSpan);
          }
-         document.getElementById(id).innerHTML += "]";
+
+         document.getElementById(id).appendChild(newMainSpan);
       }
    </script>
 </head>
@@ -89,7 +93,7 @@
       <h3>Wizualizacja</h3>
 
       <div class="visualization">
-         <div class="visualization-content">
+         <div class="visualization-input">
             <span>
                $A[] = \,$
             </span>
@@ -117,11 +121,14 @@
 
             document.getElementById('visualizationkadane').innerHTML = "";
             draw_array(A, 'visualizationkadane')
-            document.getElementById('visualizationkadane').innerHTML += l; /* todo latex like "$l = $" */
-            document.getElementById('visualizationkadane').innerHTML += " ";
+            document.getElementById('visualizationkadane').innerHTML += "\\[";
+            document.getElementById('visualizationkadane').innerHTML += "l = ";
+            document.getElementById('visualizationkadane').innerHTML += l;
+            document.getElementById('visualizationkadane').innerHTML += ", r = ";
             document.getElementById('visualizationkadane').innerHTML += r;
-            document.getElementById('visualizationkadane').innerHTML += " ";
-            document.getElementById('visualizationkadane').innerHTML += maxsum; /* todo highlight the optimal range, also print more of the algo working */
+            document.getElementById('visualizationkadane').innerHTML += ", maxsum = ";
+            document.getElementById('visualizationkadane').innerHTML += maxsum;
+            document.getElementById('visualizationkadane').innerHTML += "\\]";
          }
 
          let arr = arraykadane.value.split(' ').join('').split(',');
@@ -173,7 +180,7 @@
 
       <h3>Wizualizacja</h3>
       <div class="visualization">
-         <div class="visualization-content">
+         <div class="visualization-input">
             <span>
                $A[] = \,$
             </span>
@@ -193,11 +200,13 @@
                m = Math.floor((l + r) / 2);
 
                draw_array(A, 'visualizationbinarysearch');
-               document.getElementById('visualizationbinarysearch').innerHTML += " " + l; /* todo latex like "$l = $" */
-               document.getElementById('visualizationbinarysearch').innerHTML += " ";
+               document.getElementById('visualizationbinarysearch').innerHTML += "\\[";
+               document.getElementById('visualizationbinarysearch').innerHTML += "l = " + l;
+               document.getElementById('visualizationbinarysearch').innerHTML += ", r = ";
                document.getElementById('visualizationbinarysearch').innerHTML += r;
-               document.getElementById('visualizationbinarysearch').innerHTML += " ";
-               document.getElementById('visualizationbinarysearch').innerHTML += m; /* todo highlight range and A[m] */
+               document.getElementById('visualizationbinarysearch').innerHTML += ", m = ";
+               document.getElementById('visualizationbinarysearch').innerHTML += m;
+               document.getElementById('visualizationbinarysearch').innerHTML += "\\]";
 
                if (parseInt(A[m], 10) < k) {
                   l = m + 1;
@@ -287,7 +296,7 @@
 
       <h3>Wizualizacja</h3>
       <div class="visualization">
-         <div class="visualization-content">
+         <div class="visualization-input">
             <span>
                $A[] = \,$
             </span>
@@ -318,11 +327,13 @@
                m = l + Math.floor((k - parseInt(A[l], 10)) * (r - l) / (parseInt(A[r], 10) - parseInt(A[l], 10)));
 
                draw_array(A, 'visualizationinterpolationsearch');
-               document.getElementById('visualizationinterpolationsearch').innerHTML += " " + l; /* todo latex like "$l = $" */
-               document.getElementById('visualizationinterpolationsearch').innerHTML += " ";
+               document.getElementById('visualizationinterpolationsearch').innerHTML += "\\[";
+               document.getElementById('visualizationinterpolationsearch').innerHTML += "l = " + l;
+               document.getElementById('visualizationinterpolationsearch').innerHTML += ", r = ";
                document.getElementById('visualizationinterpolationsearch').innerHTML += r;
-               document.getElementById('visualizationinterpolationsearch').innerHTML += " "; /* todo m calc latex */
-               document.getElementById('visualizationinterpolationsearch').innerHTML += m; /* todo highlight range and A[m] */
+               document.getElementById('visualizationinterpolationsearch').innerHTML += ", m = ";
+               document.getElementById('visualizationinterpolationsearch').innerHTML += m;
+               document.getElementById('visualizationinterpolationsearch').innerHTML += "\\]";
 
                if (parseInt(A[m], 10) < k) {
                   l = m + 1;
@@ -366,24 +377,28 @@
       </p>
 
       <p>
-
+         Złożoność pesymistyczna zachodzi, gdy nie ma w tablicy szukanej wartości. $\bigO{\log \log n}$
       </p>
-      pesymistyczny - gdy nie ma w tablicy szukanej wartosci?
-
-      $\bigO{\log \log n}$ to jest niby w optymalnym przypadku, tez $\bigO{n}
-
-      <h3>Modyfikacja na tablice o innych rozkładach danych</h3>
 
       <p>
-
-
-
-         Na przykład, dla danych o rozkładzie jednostajnie kwadratowym
-
-         dla zestawu danych będącego spisem nazwisk w książce telefonicznej
+         W pesymistycznym przypadku, w którym założony został jednostajnie liniowy rozkład danych, ale dane są jedynie
+         posortowane, złożoność wynosi $\bigO{n}$, gdyż podczas każdej iteracji przeszukiwania (a każda z nich zajmuje czas
+         stały) $m$ wzrasta lub maleje o jeden. Złożoność $\bigTheta{n}$ jest osiągnięta dla np. tablicy $A$ o
+         jednostajnie wykładniczym rozkładzie danych.
       </p>
 
-      jak znajdywac np ostatni wyraz gdy jest duzo rownosci? np sprobuj tablice ciag staly
+      <h3>Modyfikacja na tablice o innych rozkładach danych</h3>
+      <p>
+         Algorytm przeszukiwania interpolacyjnego można stosować również na tablicach o rozkładzie danych innym niż
+         jednostajnie liniowy. Wystarczy wtedy odpowiednio zmodyfikować wzór na $m$.
+      </p>
+
+      <p>
+         Na przykład, dla danych o rozkładzie jednostajnie kwadratowym wystarczy znaleźć $m$ na podstawie interpolacji
+         funkcji kwadratowej. Innym przykładem zestawu danych, dla którego można skorzystać z przeszukiwania interpolacyjnego
+         jest spis nazwisk w książce telefonicznej. Wtedy wystarczy obliczyć $m$ przez intepolację funkcji liniowej
+         ważonej danymi frekwencji występowania poszczególnych liter.
+      </p>
       
       <h3>Implementacja</h3>
 
@@ -482,7 +497,7 @@ class InterpolationSearch {
       <h3>Wizualizacja</h3>
 
       <div class="visualization">
-         <div class="visualization-content">
+         <div class="visualization-input">
             <span>
                $A[] = \,$
             </span>
@@ -505,7 +520,7 @@ class InterpolationSearch {
                array[min] = array[i];
                array[i] = temp;
 
-               draw_array(array, 'visualizationselectionsort'); /* todo highlight the two swapped */
+               draw_array(array, 'visualizationselectionsort');
             }
          }
 
@@ -557,7 +572,7 @@ class InterpolationSearch {
       <h3>Wizualizacja</h3>
       
       <div class="visualization">
-         <div class="visualization-content">
+         <div class="visualization-input">
             <span>
                $A[] = \,$
             </span>
