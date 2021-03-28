@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <title>Metody programowania</title>
+   <link rel="stylesheet" type="text/css" href="css/css.css"/>
+
+   <script>
+      MathJax = {
+         tex: {
+            inlineMath: [['$','$'], ['\\(','\\)']],
+            displayMath: [['$$','$$'], ['\\[','\\]']],
+            processEscapes: true,
+            processEnvironments: true,
+            macros: {
+               bigO: ["\\operatorname{O}\\!\\left(#1\\right)", 1],
+               bigTheta: ["\\operatorname{\\Theta}\\!\\left(#1\\right)", 1]
+            }
+         }
+      }
+   </script>
+   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pseudocode@latest/build/pseudocode.min.css">
+   <script src="https://cdn.jsdelivr.net/npm/pseudocode@latest/build/pseudocode.min.js"></script>
+
+   <link rel="stylesheet" href="css/hljs.css">
+   <script src="js/highlight.pack.js"></script>
+   <script>
+      hljs.highlightAll();
+   </script>
+
+   <script>
+      function setTheme(themeName) {
+         localStorage.setItem('theme', themeName);
+         document.documentElement.className = themeName;
+      }
+
+      function toggleTheme() {
+         if (localStorage.getItem('theme') === 'theme-dark') {
+            setTheme('theme-light');
+         } else {
+            setTheme('theme-dark');
+         }
+      }
+
+      (function () {
+         if (localStorage.getItem('theme') === 'theme-dark') {
+            setTheme('theme-dark');
+         } else {
+            setTheme('theme-light');
+         }
+      })();
+   </script>
+
+   <script>
+      function draw_array(A, id) {
+         let newMainSpan = document.createElement('span');
+         newMainSpan.setAttribute('class', 'array');
+
+         for (j = 0; j < A.length; ++j) {
+            let newSpan = document.createElement('span');
+            newSpan.setAttribute('class', 'array-element');
+            newSpan.innerHTML = A[j];
+            newMainSpan.appendChild(newSpan);
+         }
+
+         document.getElementById(id).appendChild(newMainSpan);
+      }
+   </script>
+</head>
+<body>
+   <div class="card">
+      <div class="header">
+         <h1>Zadanie 4</h1>
+         <button class="button-theme" id="switch" onclick="toggleTheme()"></button>
+      </div>
+      <h2>Bubble sort</h2>
+      <h3>Liczba zamian</h3>
+      <p>
+         <em>Inwersją</em> w tablicy $A$ nazywamy parę uporządkowaną $(i, j)$ taką, że $i < j$ oraz $A[i] > A[j]$.
+         Zauważmy, że przy każdym porównaniu bubble sort usuwa zero (gdy porównanie zwraca fałsz) lub jedną inwersję.
+         Jest tak, ponieważ podczas zamiany dwóch sąsiednich wyrazów inwersje zależące od innych wyrazów niż te dwa wyrazy
+         nie podlegają zmianie. Zauważmy ponadto, że dla tablicy o rozmiarze $n$ bubble sort zdefiniowany według pseudokodu w
+         <a href="3.html#bubblesortpseudocode">poprzednim zadaniu</a> wykonuje co najwyżej
+         $(n-1) + (n-2) + \ldots + 1 = \frac{n(n-1)}{2}$ porównań.
+      </p>
+      <p>
+         Tablica odwrotnie posortowana ma $\frac{n(n-1)}{2}$ inwersji. Stąd dla takiej tablicy wejściowej, bubble sort
+         wykona zamianę wyrazów przy każdym porównaniu, gdyż każde z co najwyżej $\frac{n(n-1)}{2}$ porównań
+         w skutkuje zmniejszeniem się liczby inwersji o co najwyżej jeden.
+      </p>
+
+      <h3>Stabilność</h3>
+      <p>
+         Algorytm sortowania nazywamy <em>stabilnym</em>, jeśli po posortowaniu tablicy wszystkie wyrazy o równych
+         wartościach znajdują się w niej w takiej samej kolejności jak przed sortowaniem.
+      </p>
+      <p>
+         W bubble sorcie wyrazy są zamieniane jedynie, gdy są sąsiadujące i lewy wyraz jest większy od prawego.
+         Stąd kolejność wyrazów o równej wartości nigdy nie może być zamieniona i bubble sort jest stabilny.
+      </p>
+      </p>
+      <h3>Implementacja</h3>
+      <p>
+         Poniższy kod implementuje cocktail sort, dwustronny wariant bubble sorta, wraz z kilkoma optymalizacjami:
+      </p>
+      <div class="code">
+         <div class="tio">
+            <a class="tio-link" href="https://tio.run/##1VTBjtowEL3nK6a3oA3Z0na7ldyuFPUTOCJUDYmBSWI7SpyNkhXfTscOC4Fuq16XA3HmPd7MvBmc4zPOTSV1nhXHI6nK1BZyDsatpTJO6hr7RgRBWmLTwE@TFhapXDrWSwAAjUVLKTwbyiA9ob8ahkPSFpLVejby@OMCGn5AEpdS7@xeTOKK4wtOM0a6PZUSQgXfQV9@/yrhND4KuL@HXDYluYCmXdbzt4TBcEX@oEhqMlpGYI2HNn2JUBlbD3KjEQZUhPwkUGbw74XR6dCnwSXf1tTgGyHOqQQ/uCIBd3d0VZarbAthsiKYw2INT9w4rW8pp/qtVJVz4UQWt5yziue8iTvMyfyB3b57r8h7NWDFDcvRHGeSZXeg67lp1DJ3fqHurwQOweR4OTtNrb1oyzqd81mCM4/tlZYnMjiflUlxmhX/kfUizqIe7TtfaNaZdA9bHIAnVPHkHD@CmgMm4yTpgLZozwFfRHA1lA@nNbqdxqaWWIi3O/QbqSar6gYi/rYX2qN8fPI7Mp@/k@XwHZL4n5E7plKvVE8a4ardlPz3n94CCkmHS1uT3q3WgPWuuboCOJaw2stDBJ8j@BrBlwgWEXyK4FsEj4ezy9eXSTI7A8u@4fZi09q44iS21OF4S8XWjGmZPRNjjYfj8Tc">
+               Try it online
+            </a>
+         </div>
+         <pre><code class="java">import java.util.Arrays;
+
+class CocktailSort {
+   static void cocktail_sort(int A[]) {
+      int n = A.length;
+      int m = 1;
+
+      while (m < n) {
+         int nn = 0; // jesli nn nigdy nie zostanie zmienione, to nie byla potrzebna zamiana i mozna zakonczyc
+
+         for (int i = m; i < n; ++i) {
+            if (A[i - 1] > A[i]) {
+               int temp = A[i - 1];
+               A[i - 1] = A[i];
+               A[i] = temp;
+               
+               nn = i; // zapamietanie ostatnio wykonanej zmiany
+            }
+         }
+
+         n = nn; // ustawienie konca petli za pomoca zapamietania ostatnio wykonanej zmiany
+
+         // wykonywanie dwoch faz na przemian, raz od poczatku, raz od konca
+         if (!(m < n)) {
+            break;
+         }
+
+         int mm = A.length - 1;
+
+         for (int i = n - 1; i >= m; --i) {
+            if (A[i - 1] > A[i]) {
+               int temp = A[i - 1];
+               A[i - 1] = A[i];
+               A[i] = temp;
+               
+               mm = i;
+            }
+         }
+
+         m = mm;
+      }
+   }
+
+   public static void main(String[] args) {
+      int[] A = {5, 3, 6, 4, 1, 2, 8, 7};
+
+      cocktail_sort(A);
+
+      System.out.println(Arrays.toString(A));
+   }
+}</code></pre>
+      </div>
+
+      <h2>Selection sort</h2>
+      <h3>Stabilność</h3>
+      <p>
+         Tradycyjny selection sort nie jest stabilny; przykładowo, dla tablicy $[2, 2, 1]$ dwójki zostaną zamienione
+         kolejnością. Można jednak zmodyfikować selection sort tak, aby stał się on stabilny; zamiast zamieniać $k$-ty
+         najmniejszy wyraz miejscami z $k$-tym wyrazem, należy go wstawiać przed ten wyraz. Niestety, podczas gdy
+         modyfikacja ta nie zmienia złożoności dla list, to w przypadku tablic złożoność zwiększa się.
+      </p>
+
+      <h2>Insertion sort</h2>
+      <h3>Działanie</h3>
+      <p>
+         Insertion sort sortuje daną tablicę poprzez iterację, poszerzając zawsze posortowany prefiks tablicy aż pokryje
+         on całą tablicę. Podtablica jednowyrazowa jest zawsze posortowana. Następnie, pierwszy wyraz tablicy poza
+         posortowanym prefiksem jest umieszczany poprzez serię zamian wyrazów w odpowiednie miejsce tak, aby
+         stworzyć nowy posortowany prefiks o jeden wyraz dłuższy.
+      </p>
+      <h3>Pseudokod</h3>
+      <div class="pseudocode">
+         <pre id="pseudocodeinsertionsort">
+            \begin{algorithmic}
+            \PROCEDURE{insertionsort}{$A$}
+               \STATE $i \gets 1$
+               \WHILE{$i < A\text{.length}$}
+                  \STATE $j \gets i$
+                  \WHILE{$j > 0 \land A[j - 1] > A[j]$}
+                     \STATE swap $A[j - 1]$ with $A[j]$
+                     \STATE $j \gets j - 1$
+                  \ENDWHILE
+                  \STATE $i \gets i + 1$
+               \ENDWHILE
+            \ENDPROCEDURE
+            \end{algorithmic}
+         </pre>
+      </div>
+      <h3>Wizualizacja</h3>
+      <div class="visualization">
+         <div class="visualization-input">
+            <span>
+               $A[] = \,$
+            </span>
+            <input type="text" value="5, 3, 6, 4, 1, 2, 8, 7" id="arrayinsertionsort" />
+         </div>
+         <div class="visualization-content" id="visualizationinsertionsort"></div>
+      </div>
+      <script>
+         function insertion_sort(array) {
+            let i = 1;
+
+            while (i < array.length) {
+               let j = i;
+
+               while (j > 0 && parseInt(array[j - 1], 10) > parseInt(array[j], 10)) {
+                  let temp = array[j - 1];
+                  array[j - 1] = array[j];
+                  array[j] = temp;
+
+                  j = j - 1;
+
+                  draw_array(array, 'visualizationinsertionsort');
+               }
+
+               ++i;
+            }
+         }
+
+         arr = arrayinsertionsort.value.split(' ').join('').split(',');
+         draw_array(arr, 'visualizationinsertionsort');
+         insertion_sort(arr);
+
+         arrayinsertionsort.oninput = function() {
+            document.getElementById('visualizationinsertionsort').innerHTML = "";
+            arr = arrayinsertionsort.value.split(' ').join('').split(',');
+            draw_array(arr, 'visualizationinsertionsort');
+            insertion_sort(arr);
+         }
+      </script>
+      <h3>Stabilność</h3>
+      <p>
+         Podobnie jak w bubble sorcie, wyrazy w insertion sorcie są zamieniane jedynie, gdy są sąsiadujące
+         i lewy wyraz jest większy od prawego, w związku z czym kolejność wyrazów o równej wartości nigdy nie może
+         być zamieniona. Stąd insertion sort jest stabilny.
+      </p>
+      <h3>Implementacja</h3>
+      <p>
+         Poniższy kod implementuje insertion sort z binarnym wyszukiwaniem miejsca do wstawiania wyrazu.
+         Modyfikacja ta zmniejsza liczbę wykonywanych porównań z $\bigO{n}$ do $\bigO{\log n}$.
+      </p>
+      <div class="code">
+         <div class="tio">
+            <a class="tio-link" href="https://tio.run/##dVLLboMwELzzFXMkiqElfUq0lXzsOUeEKpqQxNQYZDtpoohvp@ugEEjUvay8Mzs79rrIdllQ1bkqlj9tK8q60hYFFcOtFTLkWmcHE3veQmbG4FOZXFtRqbmjHT0AxmZWLLCrxBLiDH8Zwn2hLHiSTjoixarSOFUF3hHFlN7AQ5mrtd3EmE7FhUrhiJKI9wyakmAo3YnM9JTfjZA5fEk6etRL4ciETB1yh1k8AkcHsYLPkzJ1bhKRXgtROBslSUVjlWZ0yqXJb1ud9fLftsYb33dPbOdh0NA/WuEeIab0ARkjCIprozwp0lN/gQDRUGMwkSfSkfZn9AR1Nurtt6RVDjdaZkL5c6uFWicpMr02l6HkiWqcxI5PDA8MzwyPDBHDjOGV4aXpV3X1MfikR@YHY/MyrLY2rGmKlcrv/lxoq24usSdxZ7Jp2z8">
+               Try it online
+            </a>
+         </div>
+         <pre><code class="java">import java.util.Arrays;
+
+class InsertionSort {
+   static void insertion_sort(int A[]) {
+      for (int i = 1; i < A.length; ++i) {
+         int l = 0, r = i, m = 0;
+
+         while (l < r) {
+            m = (l + r) / 2;
+            
+            if (A[m] < A[i]) {
+               l = m + 1;
+            }
+            else {
+               r = m;
+            }
+         }
+
+         int x = A[i];
+         for (int j = i; j > l; --j) {
+            A[j] = A[j - 1];
+         }
+         A[l] = x;
+      }
+   }
+
+   public static void main(String[] args) {
+      int[] A = {5, 3, 6, 4, 1, 2, 8, 7};
+
+      insertion_sort(A);
+
+      System.out.println(Arrays.toString(A));
+   }
+}</code></pre>
+      </div>
+
+      <h2>Zastosowanie kolejki LIFO do odwrócenia słowa</h2>
+      <p>
+         By odwrócić słowo za pomocą kolejki LIFO (zwaną także stosem) wystarczy kolejno wstawić symbole słowa na stos,
+         a następnie kolejno je zdjąć.
+      </p>
+   </div>
+   <script>
+      pseudocode.renderElement(document.getElementById("pseudocodeinsertionsort"));
+   </script>
+</body>
+</html>

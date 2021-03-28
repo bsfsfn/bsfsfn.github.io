@@ -1,0 +1,122 @@
+/*
+based on:
+https://github.com/atom/one-light-syntax
+https://github.com/atom/one-dark-syntax
+*/
+
+.theme-light {
+   --hljs--color-text: #383a42;
+   --hljs--color-background: #fafafa;
+   --hljs--color-comment: #a0a1a7;
+   --hljs--color-keyword: #a626a4;
+   --hljs--color-section: #e45649;
+   --hljs--color-literal: #0184bb;
+   --hljs--color-string: #50a14f;
+   --hljs--color-class: #c18401;
+   --hljs--color-number: #986801;
+   --hljs--color-title: #4078f2;
+}
+
+.theme-dark {
+   --hljs--color-text: #abb2bf;
+   --hljs--color-background: #282c34;
+   --hljs--color-comment: #5c6370;
+   --hljs--color-keyword: #c678dd;
+   --hljs--color-section: #e06c75;
+   --hljs--color-literal: #56b6c2;
+   --hljs--color-string: #98c379;
+   --hljs--color-class: #e6c07b;
+   --hljs--color-number: #d19a66;
+   --hljs--color-title: #61aeee;
+}
+
+.hljs {
+   display: block;
+   overflow-x: auto;
+   padding: 0.5em;
+   color: var(--hljs--color-text);
+   background: var(--hljs--color-background);
+}
+
+.hljs-comment,
+.hljs-quote {
+   color: var(--hljs--color-comment);
+   font-style: italic;
+}
+
+.hljs-doctag,
+.hljs-keyword,
+.hljs-formula {
+   color: var(--hljs--color-keyword);
+}
+
+.hljs-section,
+.hljs-name,
+.hljs-selector-tag,
+.hljs-deletion,
+.hljs-subst {
+   color: var(--hljs--color-section);
+}
+
+.hljs-literal {
+   color: var(--hljs--color-literal);
+}
+
+.hljs-string,
+.hljs-regexp,
+.hljs-addition,
+.hljs-attribute,
+.hljs-meta-string {
+   color: var(--hljs--color-string);
+}
+
+.hljs-built_in,
+.hljs-class .hljs-title {
+   color: var(--hljs--color-class);
+}
+
+.hljs-attr,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-type,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-number {
+   color: var(--hljs--color-number);
+}
+
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link,
+.hljs-meta,
+.hljs-selector-id,
+.hljs-title {
+   color: var(--hljs--color-title);
+}
+
+.hljs-keyword,
+.hljs-attribute,
+.hljs-selector-tag,
+.hljs-meta-keyword,
+.hljs-doctag,
+.hljs-name {
+   font-weight: bold;
+}
+
+.hljs-title,
+.hljs-section {
+   font-weight: bold;
+}
+
+.hljs-emphasis {
+   font-style: italic;
+}
+ 
+.hljs-strong {
+   font-weight: bold;
+}
+
+.hljs-link {
+   text-decoration: underline;
+}
