@@ -6,20 +6,7 @@
    <title>Metody programowania</title>
    <link rel="stylesheet" type="text/css" href="css/css.css"/>
 
-   <script>
-      MathJax = {
-         tex: {
-            inlineMath: [['$','$'], ['\\(','\\)']],
-            displayMath: [['$$','$$'], ['\\[','\\]']],
-            processEscapes: true,
-            processEnvironments: true,
-            macros: {
-               bigO: ["\\operatorname{O}\\!\\left(#1\\right)", 1],
-               bigTheta: ["\\operatorname{\\Theta}\\!\\left(#1\\right)", 1]
-            }
-         }
-      }
-   </script>
+   <script src="js/mathjax-setup.js"></script>
    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pseudocode@latest/build/pseudocode.min.css">
@@ -27,48 +14,8 @@
 
    <link rel="stylesheet" href="css/hljs.css">
    <script src="js/highlight.pack.js"></script>
-   <script>
-      hljs.highlightAll();
-   </script>
-
-   <script>
-      function setTheme(themeName) {
-         localStorage.setItem('theme', themeName);
-         document.documentElement.className = themeName;
-      }
-
-      function toggleTheme() {
-         if (localStorage.getItem('theme') === 'theme-dark') {
-            setTheme('theme-light');
-         } else {
-            setTheme('theme-dark');
-         }
-      }
-
-      (function () {
-         if (localStorage.getItem('theme') === 'theme-dark') {
-            setTheme('theme-dark');
-         } else {
-            setTheme('theme-light');
-         }
-      })();
-   </script>
-
-   <script>
-      function draw_array(A, id) {
-         let newMainSpan = document.createElement('span');
-         newMainSpan.setAttribute('class', 'array');
-
-         for (j = 0; j < A.length; ++j) {
-            let newSpan = document.createElement('span');
-            newSpan.setAttribute('class', 'array-element');
-            newSpan.innerHTML = A[j];
-            newMainSpan.appendChild(newSpan);
-         }
-
-         document.getElementById(id).appendChild(newMainSpan);
-      }
-   </script>
+   
+   <script src="js/js.js"></script>
 </head>
 <body>
    <div class="card">
@@ -263,6 +210,12 @@
             draw_array(arr, 'visualizationbinarysearch');
             binary_search(arr, parseInt(document.getElementById('binarysearchkey').value, 10));
          }
+         binarysearchkey.oninput = function() {
+            document.getElementById('visualizationbinarysearch').innerHTML = "";
+            arr = arraybinarysearch.value.split(' ').join('').split(',');
+            draw_array(arr, 'visualizationbinarysearch');
+            binary_search(arr, parseInt(document.getElementById('binarysearchkey').value, 10));
+         }
       </script>
       
       <h3>Złożoność obliczeniowa</h3>
@@ -393,6 +346,12 @@
          interpolation_search(arr, parseInt(document.getElementById('interpolationsearchkey').value, 10));
 
          arrayinterpolationsearch.oninput = function() {
+            document.getElementById('visualizationinterpolationsearch').innerHTML = "";
+            arr = arrayinterpolationsearch.value.split(' ').join('').split(',');
+            draw_array(arr, 'visualizationinterpolationsearch');
+            interpolation_search(arr, parseInt(document.getElementById('interpolationsearchkey').value, 10));
+         }
+         interpolationsearchkey.oninput = function() {
             document.getElementById('visualizationinterpolationsearch').innerHTML = "";
             arr = arrayinterpolationsearch.value.split(' ').join('').split(',');
             draw_array(arr, 'visualizationinterpolationsearch');

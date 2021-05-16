@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <title>Metody programowania</title>
+   <link rel="stylesheet" type="text/css" href="css/css.css"/>
+
+   <script src="js/mathjax-setup.js"></script>
+   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pseudocode@latest/build/pseudocode.min.css">
+   <script src="https://cdn.jsdelivr.net/npm/pseudocode@latest/build/pseudocode.min.js"></script>
+
+   <link rel="stylesheet" href="css/hljs.css">
+   <script src="js/highlight.pack.js"></script>
+
+   <script src="js/js.js"></script>
+
+   <script>
+      function priorytet(c) {
+         if (c == '-' || c == '+') {
+            return 1;
+         }
+         if (c == '*' || c == '/') {
+            return 2;
+         }
+         if (c == '(' || c == ')') {
+            return 3;
+         }
+         return 4;
+      }
+
+      function inftoonp(inf, b) {
+         var S = [];
+         var R = [];
+
+         for (let i = 0; i < inf.length; ++i) {
+            if (inf[i] == '(') {
+               S.push('(');
+               if (b == 0) draw_two_arrays(S, R, 'visualizationinftoonp', "Stos operatorów: ", "Stos odpowiedzi: ", 'red', 'indigo');
+            }
+            else if (inf[i] == ')') {
+               while (S.length > 0) {
+                  let j = S.pop();
+                  if (j == '(') {
+                     if (b == 0) draw_two_arrays(S, R, 'visualizationinftoonp', "Stos operatorów: ", "Stos odpowiedzi: ", 'red', 'indigo');
+                     break;
+                  }
+                  R.push(j);
+                  if (b == 0) draw_two_arrays(S, R, 'visualizationinftoonp', "Stos operatorów: ", "Stos odpowiedzi: ", 'red', 'indigo');
+               }
+            }
+            else if (inf[i] == '+' || inf[i] == '-' || inf[i] == '*' || inf[i] == '/') {
+               while (S.length > 0 && S[S.length - 1] != '(' && (priorytet(inf[i]) <= priorytet(S[S.length - 1]))) {
+                  let j = S.pop();
+                  R.push(j);
+                  if (b == 0) draw_two_arrays(S, R, 'visualizationinftoonp', "Stos operatorów: ", "Stos odpowiedzi: ", 'red', 'indigo');
+               }
+               S.push(inf[i]);
+            }
+            else {
+               R.push(inf[i]);
+               if (b == 0) draw_two_arrays(S, R, 'visualizationinftoonp', "Stos operatorów: ", "Stos odpowiedzi: ", 'red', 'indigo');
+            }
+         }
+
+         while (S.length > 0) {
+            R.push(S.pop());
+            if (b == 0) draw_two_arrays(S, R, 'visualizationinftoonp', "Stos operatorów: ", "Stos odpowiedzi: ", 'red', 'indigo');
+         }
+
+         return R;
+      }
+   </script>
+</head>
+<body>
+   <div class="card">
+      <div class="header">
+         <h1>Zadanie 5</h1>
+         <button class="button-theme" id="switch" onclick="toggleTheme()"></button>
+      </div>
+
+      <h2>Odwrotna notacja polska</h2>
+      <h3>Idea</h3>
+      <p>
+         Odwrotna notacja polska, w skrócie ONP, jest jedną z metod zapisu wyrażeń algebraicznych. Posiada ona wiele
+         zalet, których nie posiada powszechnie używana przez ludzi notacja infiksowa, takich jak: 
+         <ul>
+            <li>przetwarzanie wyrażenia może być wykonywane czytając je po kolei</li>
+            <li>jednoznaczność bez potrzeby korzystania z nawiasów</li>
+            <li>łatwość reprezentacji operacji o dowolnie wielkiej krotności.</li>
+         </ul>
+      </p>
+
+      <h3>Drzewo wyrażeń</h3>
+      <p>
+         Wyrażenie algebraiczne można również przedstawić w postaci drzewa, którego liście są operandami, a rodzice
+         wierzchołków symbolizują operację na nich wykonywaną. Wyrażenie w postaci drzewa może być ewaluowane
+         poprzez rozpoczęcie od korzenia i rekursywne ewaluowanie poddrzew.
+      </p>
+      <p>
+         Za pomocą ONP można szybko stworzyć drzewo danego wyrażenia. Czytając po kolei wyrażenie w ONP, jeżeli znak
+         jest operandem, to stwórz nowy korzeń lasu, a jeżeli jest operatorem, to złącz dwa ostatnie drzewa
+         poprzez nadanie ich korzeniom rodzica w postaci wierzchołka z przeczytanym operatorem.
+      </p>
+      <div class="visualization">
+         <div class="visualization-input">
+            <span>
+               Wyrażenie infiksowe:&ensp;
+            </span>
+            <input type="text" value="a*((b-c)+d/e)-f" id="wyrazeniedrzewoinfiksowe"/>
+         </div>
+         <div class="visualization-content" id="visualizationdrzewoinfiksowe"></div>
+      </div>
+      <script>
+         function draw_infix_tree(onp) {
+            var T = [];
+            var capacity = 0;
+            var level = 0;
+            var level_capacity = 0;
+
+            for (let i = 0; i < onp.length; ++i) {
+               if (onp[i] == '+' || onp[i] == '-' || onp[i] == '*' || onp[i] == '/') {
+                  // merge two last nodes on the level
+                  // if level_capacity is low enough, promote
+               }
+               else {
+                  if (level_capacity < Math.pow(2, level)) {
+                     T[Math.pow(2, level) - 1 + level_capacity] = onp[i];
+                     ++level_capacity;
+                  }
+                  else {
+                     // demote
+                  }
+               }
+            }
+
+            // draw arrays 0, 1..2, 3..6, ... etc ! until capacity, dont draw zeros somehow
+            // i'd like to refine the spacing though too 
+         }
+
+         inf = wyrazeniedrzewoinfiksowe.value.split(' ').join('');
+         onp = inftoonp(inf, 1);
+         draw_infix_tree(onp);
+
+         wyrazeniedrzewoinfiksowe.oninput = function() {
+            document.getElementById('visualizationdrzewoinfiksowe').innerHTML = "";
+            inf = wyrazeniedrzewoinfiksowe.value.split(' ').join('');
+            onp = inftoonp(inf, 1);
+            draw_infix_tree(onp);
+         }
+      </script>
+
+      <h3>Zamiana infiksowego wyrażenia na ONP</h3>
+      <div class="visualization">
+         <div class="visualization-input">
+            <span>
+               Wyrażenie infiksowe:&ensp;
+            </span>
+            <input type="text" value="a*b+c/(d+f)-g" id="wyrazenieinftoonp"/>
+         </div>
+         <div class="visualization-content" id="visualizationinftoonp"></div>
+      </div>
+      <script>
+         inf = wyrazenieinftoonp.value.split(' ').join('');
+         inftoonp(inf, 0);
+
+         wyrazenieinftoonp.oninput = function() {
+            document.getElementById('visualizationinftoonp').innerHTML = "";
+            inf = wyrazenieinftoonp.value.split(' ').join('');
+            inftoonp(inf, 0);
+         }
+      </script>
+
+      <h3>Obliczanie wartości wyrażenia w ONP</h3>
+      <p>
+         Infiksowe wyrażenie $\texttt{a * ((b - c) + d / e) - f}$ jest równoważne wyrażeniu 
+         $\texttt{a b c - d e / + * f - }$ w ONP.
+      </p>
+      <div class="visualization">
+         <div class="visualization-input">
+            <span>
+               Wyrażenie w ONP:&ensp;
+            </span>
+            <input type="text" value="7 5 4 - 8 2 / + * 3 - " id="wyrazenieonpeval"/>
+         </div>
+         <div class="visualization-content" id="visualizationonpeval"></div>
+      </div>
+      <script>
+         function onpeval(onp) {
+            var S = [];
+            var a, b;
+
+            for (let i = 0; i < onp.length; ++i) {
+               if (onp[i] == '+') {
+                  a = S.pop();
+                  b = S.pop();
+
+                  S.push(parseInt(b, 10) + parseInt(a, 10));
+               }
+               else if (onp[i] == '-') {
+                  a = S.pop();
+                  b = S.pop();
+
+                  S.push(parseInt(b, 10) - parseInt(a, 10));
+               }
+               else if (onp[i] == '*') {
+                  a = S.pop();
+                  b = S.pop();
+
+                  S.push(parseInt(b, 10) * parseInt(a, 10));
+               }
+               else if (onp[i] == '/') {
+                  a = S.pop();
+                  b = S.pop();
+
+                  S.push(parseInt(b, 10) / parseInt(a, 10));
+               }
+               else {
+                  S.push(onp[i]);
+               }
+
+               draw_array(S, 'visualizationonpeval');
+            }
+         }
+
+         let onp = wyrazenieonpeval.value.split(' ').join('');
+         onpeval(onp);
+
+         wyrazenieonpeval.oninput = function() {
+            document.getElementById('visualizationonpeval').innerHTML = "";
+            onp = wyrazenieonpeval.value.split(' ').join('');
+            onpeval(onp);
+         }
+      </script>
+
+   </div>
+</body>
+</html>

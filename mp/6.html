@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <title>Metody programowania</title>
+   <link rel="stylesheet" type="text/css" href="css/css.css"/>
+
+   <script src="js/mathjax-setup.js"></script>
+   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pseudocode@latest/build/pseudocode.min.css">
+   <script src="https://cdn.jsdelivr.net/npm/pseudocode@latest/build/pseudocode.min.js"></script>
+
+   <link rel="stylesheet" href="css/hljs.css">
+   <script src="js/highlight.pack.js"></script>
+
+   <script src="js/js.js"></script>
+</head>
+<body>
+   <div class="card">
+      <div class="header">
+         <h1>Zadanie 6</h1>
+         <button class="button-theme" id="switch" onclick="toggleTheme()"></button>
+      </div>
+      <h2>Rekurencja ogonowa</h2>
+      <h3>Idea rekurencji ogonowej na przykładzie silni</h3>
+      <p>
+         Rekurencja to sposób rozwiązywania problemu poprzez wykorzystywanie odpowiedzi na ten sam problem, ale dla
+         łatwiejszych jego instancji. Na przykład, kod obliczający wartość silni z definicji wygląda tak:
+      </p>
+
+      <div class="code">
+         <div class="tio">
+            <a class="tio-link" href="https://tio.run/##VY7NDoIwEITvPMUciwlELl4MV1@Ao/FQ@UuxbEm7kBjDs9cqEHRuO/NlZjs5ycQMNXXVw/tSS@dwkSUbq6TGKwLgWLIqoYjRbIn4XBQvQJBqIAh5juPuBdmaR0vIzqs1R9FfQDj8dBISZPGXXcBhvOuwvD4wGVWhl4pEwVZRe71B2tbtg8XTcd2nZuR0CABrEnv5Kd6aZ@/f">
+               Try it online
+            </a>
+         </div>
+         <pre><code class="java">int factorial(int n) {
+   if (n == 0) {
+      return 1;
+   }
+
+   return n * factorial(n - 1);
+}</code></pre>
+      </div>
+
+      <p>
+         Kod ten jest jednak w pewien sposób nieoptymalny. Mianowicie, zanim funkcja $\texttt{factorial}$ jest w stanie
+         wykonać operacje we wnętrzu jej ciała (w tym przypadku mnożenie), to musi najpierw po kolei zejść wywołanie po
+         wywołaniu aż do przypadku bazowego rekurencji, a dopiero po tym wykonać te operacje. Rekurencja ogonowa polega na
+         wyeliminowaniu tego problemu poprzez zapewnienie, że rekurencyjne wywołanie funkcji będzie ostatnią wykonywaną
+         operacją w funkcji. Oznacza to, że potrzebne jest zapamiętanie wyników operacji, które zostały wykonane przed
+         wywołaniem rekurencyjnym; można to zrobić dodając do funkcji nowy argument przechowujący dotychczasowe
+         wyniki operacji.
+      </p>
+
+      <p>
+         Kod obliczający wartość silni za pomocą rekurencji ogonowej wygląda zatem następująco:
+      </p>
+
+      <div class="code">
+         <div class="tio">
+            <a class="tio-link" href="https://tio.run/##XY69DoJAEIR7nmJKMECksTG2voClMWZFMAvnQu4WDDE@O6JgiEw5P/mmoJaiqs6kuJZ9nxpyDntKtbJMBk8PgFNSTsGiUGJzzn@x/7Ek/CaPTrgMxsEgzuELdjusZ2@QzbSxMpa3k/3yvL9wwRBESEIIVhPjuxtHdXMxw7PpYFvxFXdi8Q9qWW7HE8je3Hzg0DnN7nHVaFwPBTXiL2CbEEnwI7z6/g0">
+               Try it online
+            </a>
+         </div>
+         <pre><code class="java">int tail_factorial(int n, int wynik) {
+   if (n == 0) {
+      return wynik;
+   }
+
+   return tail_factorial(n - 1, n * wynik);
+}</code></pre>
+      </div>      
+      
+      <h2>Mergesort</h2>
+      <h3>Idea</h3>
+      <p>
+         Algorytm oparty na metodzie dziel i zwyciężaj polega na podzieleniu danego problemu na mniejsze podproblemy i
+         połączenie ich wyników otrzymując wynik całego problemu. W ten sposób dany problem można rozwiązać rekurencyjnie
+         doprowadzając go do podstawowych, łatwych do rozwiązania podproblemów.
+      </p>
+
+      <p>
+         Przykładem problemu, który można rozwiązać za pomocą paradygmatu dziel i zwyciężaj jest sortowanie. Taki algorytm
+         nazywany jest sortowaniem przez scalanie, lub z angielskiego mergesortem. Na początku algorytmu tablica do posortowania
+         zostaje podzielona na dwie połowy. Połowy te są rekurencyjnie sortowane, a następnie należy scalić te dwie posortowane
+         tablice w jedną. Da się tego dokonać poprzez trzymanie iteratorów dla każdej z dwóch tablic, zaczynając od początku.
+         Mniejszy z dwóch porównywanych wyrazów jest wstawiany do wyjściowej tablicy, a iterator jego tablicy jest przesuwany.
+         Powtarzając ten proces aż do przejścia do końca obu tablic otrzymuje się złączoną, posortowaną tablicę. Ponieważ tablica
+         jednoelementowa jest trywialnie posortowana, to cały algorytm kończy się i zwraca posortowaną tablicę.
+      </p>
+
+      <h3>Złożoność</h3>
+      <p>
+         Niech $T(n)$ to (pesymistyczna) złożoność obliczeniowa mergesorta. Operacja scalania jest liniowa ze względu na sumę długości
+         podtablic (która wynosi $n$), a zatem $T(n) = 2 \cdot T\left(\dfrac{n}{2} + 1\right) + \bigO{n}$, a rekurencja kończy się
+         w czasie stałym dla $T(1)$. Rozwiązując to równanie rekurencyjne, otrzymujemy  $T(n) = \bigTheta{n\log n}$.
+      </p>
+
+      <h2>Problem plecakowy</h2>
+      <h3>Treść</h3>
+      <p>
+         Problem plecakowy to matematyczny problem, w którym dany jest zbiór $n$ przedmiotów, a $i$-ty przedmiot (indeksując
+         przedmioty od $1$) ma pewną wartość $c_i$ i wagę $w_i$. Problem polega na znalezeniu największej możliwej
+         łącznej wartości przedmiotów mając do dyspozycji łączną wagę $W$. Istnieje kilka wariantów problemu, w tym
+         omówieniu przyjmujemy, że każdy przedmiot możemy wziąć co najwyżej raz, wagi i wartości przedmiotów to dodatnie
+         liczby całkowite.
+      </p>
+
+      <h3>Algorytm</h3>
+      <p>
+         Taki problem plecakowy można rozwiązać rekurencyjnie. Zdefiniujmy funkcję $D(i, j)$ jako największą możliwą
+         wartość, jaką możemy osiągnąć rozważając zbiór pierwszych $i$ przedmiotów i mając do dyspozycji łączną wagę $j$.
+         Mamy wtedy $D(i, 0) = 0$ oraz $D(0, j) = 0$. Ponadto, $D(i, j)$ można obliczyć korzystając z wartości funkcji $D$
+         dla mniejszych argumentów:
+      </p>
+      <ul>
+         <li>
+            jeżeli $j < w_i$, to nie mamy wystarczającej ilości wagi, by wziąć $i$-ty przedmiot. W takim przypadku zachodzi
+            $D(i, j) = D(i - 1, j)$.
+         </li>
+         <li>
+            w przeciwnym wypadku, mamy wybór, czy chcemy wziąć $i$-ty przedmiot, czy też nie. Zatem wtedy
+            $D(i, j) = \max(D(i - 1, j), D(i - 1, j - w_i) + c_i)$.
+         </li>
+      </ul>
+
+      <p>
+         Dla tak zdefiniowanej funkcji $D$, rozwiązaniem problemu plecakowego jest $D(n, W)$. Korzystając z powyższych
+         zależności rekurencyjnych, wartość tę da się efektywnie znaleźć korzystając z programowania dynamicznego.
+         Złożoność obliczeniowa takiego rozwiązania to $\bigO{nW}$.
+      </p>
+
+      <h3>Wizualizacja</h3>
+      <div class="visualization">
+         <div class="visualization-input">
+            <span>
+               $n = \,$
+            </span>
+            <input type="text" value="5" id="knapsackn" />
+            <span>
+               $, W = \,$
+            </span>
+            <input type="text" value="8" id="knapsackw" />
+            <span>
+               $, c[] = \,$
+            </span>
+            <input type="text" value="7, 4, 5, 6, 3" id="knapsackcosts" />
+            <span>
+               $, w[] = \,$
+            </span>
+            <input type="text" value="4, 3, 2, 4, 2" id="knapsackweights" />
+         </div>
+         <div class="visualization-content" id="visualizationknapsack"></div>
+      </div>
+      <script>
+         function knapsack(n, W, c, w) {
+            let D = Array((W + 1) * (n + 1)).fill(0);
+
+            draw_2d_array(D, 'visualizationknapsack', n, W);
+
+            for (i = 1; i <= n; ++i) {
+               for (j = 0; j <= W; ++j) {
+                  if (j < parseInt(w[i - 1], 10)) {
+                     D[(n + 1) * j + i] = D[(n + 1) * j + (i - 1)];
+                  }
+                  else {
+                     if (D[(n + 1) * (j - parseInt(w[i - 1], 10)) + (i - 1)] + parseInt(c[i - 1], 10) > D[(n + 1) * j + (i - 1)]) {
+                        D[(n + 1) * j + i] = D[(n + 1) * (j - parseInt(w[i - 1], 10)) + (i - 1)] + parseInt(c[i - 1], 10);
+                     }
+                     else {
+                        D[(n + 1) * j + i] = D[(n + 1) * j + (i - 1)];
+                     }
+                  }
+               }
+               draw_2d_array(D, 'visualizationknapsack', n, W);
+            }
+         }
+
+         let cc = knapsackcosts.value.split(' ').join('').split(',');
+         let ww = knapsackweights.value.split(' ').join('').split(',');
+         knapsack(parseInt(knapsackn.value, 10), parseInt(knapsackw.value, 10), cc, ww);
+
+         knapsackn.oninput = function() {
+            document.getElementById('visualizationknapsack').innerHTML = "";
+            cc = knapsackcosts.value.split(' ').join('').split(',');
+            ww = knapsackweights.value.split(' ').join('').split(',');
+            knapsack(parseInt(knapsackn.value, 10), parseInt(knapsackw.value, 10), cc, ww);
+         }
+         knapsackw.oninput = function() {
+            document.getElementById('visualizationknapsack').innerHTML = "";
+            cc = knapsackcosts.value.split(' ').join('').split(',');
+            ww = knapsackweights.value.split(' ').join('').split(',');
+            knapsack(parseInt(knapsackn.value, 10), parseInt(knapsackw.value, 10), cc, ww);
+         }
+         knapsackcosts.oninput = function() {
+            document.getElementById('visualizationknapsack').innerHTML = "";
+            cc = knapsackcosts.value.split(' ').join('').split(',');
+            ww = knapsackweights.value.split(' ').join('').split(',');
+            knapsack(parseInt(knapsackn.value, 10), parseInt(knapsackw.value, 10), cc, ww);
+         }
+         knapsackweights.oninput = function() {
+            document.getElementById('visualizationknapsack').innerHTML = "";
+            cc = knapsackcosts.value.split(' ').join('').split(',');
+            ww = knapsackweights.value.split(' ').join('').split(',');
+            knapsack(parseInt(knapsackn.value, 10), parseInt(knapsackw.value, 10), cc, ww);
+         }
+      </script>
+
+      <h2>Problem wież Hanoi</h2>
+      <h3>Treść</h3>
+      <p>
+         Problem wież Hanoi to zagadka, w której dane są trzy stosy i $n$ dysków o różnych średnicach, postawionych na
+         pierwszym stosie w kolejności malejących średnic do góry. Jej celem jest przeniesienie wieży na trzeci stos,
+         przy czym można ruszać jedynie jeden dysk jednocześnie i dysk o większej średnicy nie może być postawiony na
+         górze dysku o mniejszej średnicy.
+      </p>
+
+      <h3>Algorytm</h3>
+      <p>
+         Nazwijmy pierwszy stos stosem wejściowym, trzeci stos stosem wyjściowym, a drugi stos stosem pomocniczym. Wtedy
+         problem wież Hanoi można rozwiązać wykonując trzy kroki:
+      </p>
+      <ol>
+         <li>
+            przeniesienie górnych $n-1$ krążków z pierwszego stosu na drugi (zauważmy, że jest to problem wież Hanoi dla
+            $n-1$ wież, gdzie stosem wejściowym jest pierwszy stos, stosem wyjściowym jest drugi stos, a stosem pomocniczym
+            jest trzeci stos)
+         </li>
+         <li>przeniesienie krążka z pierwszego stosu na trzeci</li>
+         <li>
+            przeniesienie górnych $n-1$ krążków z drugiego stosu na trzeci (co również jest problemem wież Hanoi dla $n-1$
+            wież o odpowiednich stosach)
+         </li>
+      </ol>
+
+      <h3>Wizualizacja</h3>
+      <div class="visualization">
+         <div class="visualization-input">
+            <span>
+               $n = \,$
+            </span>
+            <input type="text" value="4" id="nhanoi" />
+         </div>
+         <div class="visualization-content" id="visualizationhanoi"></div>
+      </div>
+      <script>
+         function hanoi_recurrence(n, A, B, C, dA, dB, dC) {
+            if (n == 0) {
+               return;
+            }
+            hanoi_recurrence(n - 1, A, C, B, dA, dB, dC);
+            C.push(A.pop());
+            draw_three_arrays(dA, dB, dC, 'visualizationhanoi', "pierwszy stos: ", "drugi stos: ", "trzeci stos: ", 'blue', 'red', 'green');
+            hanoi_recurrence(n - 1, B, A, C, dA, dB, dC);
+         }
+
+         function hanoi(n) {
+            var A = [];
+            var B = [];
+            var C = [];
+
+            for (let i = n; i > 0; --i) {
+               A.push(i);
+            }
+
+            draw_three_arrays(A, B, C, 'visualizationhanoi', "pierwszy stos: ", "drugi stos: ", "trzeci stos: ", 'blue', 'red', 'green');
+            hanoi_recurrence(n, A, B, C, A, B, C);
+         }
+
+         hanoi(nhanoi.value);
+
+         nhanoi.oninput = function() {
+            document.getElementById('visualizationhanoi').innerHTML = "";
+            hanoi(nhanoi.value);
+         }
+      </script>
+   </div>
+</body>
+</html>

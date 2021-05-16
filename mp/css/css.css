@@ -30,6 +30,16 @@ input[type="text"] {
       url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/ttf/JetBrainsMono-Regular.ttf') format('truetype');
 }
 
+mjx-math {
+   font-size: 16px !important;
+}
+
+.TEX-T {
+   font-family: JetBrainsMono !important;
+   font-weight: bold;
+   font-size: 16px !important;
+}
+
 .hljs {
    font-family: JetBrainsMono;
 }
@@ -43,6 +53,8 @@ input[type="text"] {
    --color-link: #00e;
    --color-link-visited: #551a8b;
    --color-code-border: #d6d6d6;
+   --color-table-border: #ddd;
+   --color-table-even: #f3f3f3;
    --icon-theme: url("../img/moon.svg");
    --icon-filter-value: 0%;
    --icon-size: 36px;
@@ -57,6 +69,8 @@ input[type="text"] {
    --color-link: #0f87ff;
    --color-link-visited: #af76e5;
    --color-code-border: #3b454f;
+   --color-table-border: #222;
+   --color-table-even: #222529;
    --icon-theme: url("../img/sun.svg");
    --icon-filter-value: 100%;
    --icon-size: 32px;
@@ -118,6 +132,13 @@ a:hover, a:visited, a:link, a:active {
    text-decoration: none;
 }
 
+ul {
+   margin: -16px 0 0 0;
+}
+ol {
+   margin: -8px 0 0 0;
+}
+
 .card {
    padding: 2px 20px 20px 20px;
    border-radius: 16px;
@@ -159,6 +180,29 @@ pre {
    background: var(--hljs--color-background);
 }
 
+table {
+   margin: auto;
+   border-collapse: collapse;
+   box-shadow: 0px 0px 5px 3px var(--color-shadow);
+}
+
+th, td {
+   text-align: center;
+   padding: 6px 8px;
+}
+
+table thead tr {
+   background-color: rgb(0, 140, 255);
+}
+
+table tbody tr {
+   border-bottom: thin solid var(--color-table-border);
+}
+
+table tbody tr:nth-child(even) {
+   background-color: var(--color-table-even);
+}
+
 .visualization {
 }
 
@@ -186,14 +230,15 @@ pre {
 }
 
 .array-element {
+   --size: 16px;
    border: 2px solid var(--color-array-border);
-   border-radius: 20px;
-   font-size: 20px;
+   border-radius: var(--size);
+   font-size: var(--size);
    display: flex;
    justify-content: center;
    align-items: center;
-   height: 20px;
-   width: 20px;
-   padding: 8px;
-   margin: 4px;
+   height: var(--size);
+   width: var(--size);
+   padding: 5px;
+   margin: 2px;
 }
